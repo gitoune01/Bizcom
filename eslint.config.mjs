@@ -16,6 +16,7 @@ const eslintConfig = [
       '@typescript-eslint/no-this-alias': 'off',
       '@typescript-eslint/no-unused-expressions': 'off',
       '@typescript-eslint/no-non-null-assertion': 'off',
+      "@typescript-eslint/no-require-imports": "off"
     },
   },
 ];
