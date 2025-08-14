@@ -16,7 +16,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-
+import UserBtn from './user-btn';
+ 
 const Menu = () => {
   return (
     <div className="flex justify-end gap-3">
@@ -27,11 +28,12 @@ const Menu = () => {
             <ShoppingCart /> Cart
           </Link>
         </Button>
-        <Button asChild>
+          <UserBtn />
+        {/* <Button asChild>
           <Link href="/sign-in">
             <User2Icon /> Sign In
           </Link>
-        </Button>
+        </Button> */}
       </nav>
       <nav className="md:hidden">
         <Sheet>
@@ -45,12 +47,14 @@ const Menu = () => {
               <Link href="/cart">
                 <ShoppingCart /> Cart
               </Link>
-            </Button>
-            <Button asChild>
+            </Button> 
+
+            <UserBtn /> 
+            {/* <Button asChild>
               <Link href="/sign-in">
                 <User2Icon /> Sign In
               </Link>
-            </Button>
+            </Button> */}
             <SheetDescription></SheetDescription>
           </SheetContent>
         </Sheet>
