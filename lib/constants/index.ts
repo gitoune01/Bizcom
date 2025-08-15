@@ -12,3 +12,9 @@ export const formInVals = {
   email: '',
   password: '',
 };
+export const formUpVals = {
+  name: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
+};
