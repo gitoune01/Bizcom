@@ -36,13 +36,49 @@ export const signInFormSchema = z.object({
 });
 
 //schema for user sign up
-export const signUpFormSchema = z.object({
-  name: z.string().min(3, 'Name must be at least 3 characters long'),
-  email: z.string().email('Please enter a valid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters long'),
-  confirmPassword: z.string().min(6, 'Password must be at least 6 characters long'),
+export const signUpFormSchema = z
+  .object({
+    name: z.string().min(3, 'Name must be at least 3 characters long'),
+    email: z.string().email('Please enter a valid email address'),
+    password: z.string().min(6, 'Password must be at least 6 characters long'),
+    confirmPassword: z
+      .string()
+      .min(6, 'Password must be at least 6 characters long'),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
+  });
 
-}).refine((data) => data.password === data.confirmPassword, {
-  message: 'Passwords do not match',
-  path: ['confirmPassword'],
+//Cart schema
+export const cartItemSchema = z.object({
+  productId: z.string().min(1, 'Product ID is required'),
+  name: z.string().min(1, 'Product name is required'),
+  slug: z.string().min(1, 'Product slug is required'),
+  qty: z.number().int().nonnegative('Qty must be a non-negative integer'),
+  image: z.string().min(1, 'Product images are required'),
+  price: currency,
+});
+
+export const insertCartSchema = z.object({
+  items: z.array(cartItemSchema),
+  itemsPrice: currency,
+  totalPrice: currency,
+  shippingPrice: currency,
+  taxPrice: currency,
+  sessionCartId: z.string().min(1, 'Session cart ID is required'),
+  userId: z.string().optional().nullable(), //if user logged out, at login, he will find back his cart
+});
+
+//schema for shipping address
+
+export const shippingAddressSchema = z.object({
+  fullName: z.string().min(3,'Full name must be at least 3 characters long'),
+  streetAddress: z.string().min(3,'Street address must be at least 3 characters long'),
+  city: z.string().min(3,'City must be at least 3 characters long'),
+  postalCode: z.string().min(3,'Postal code must be at least 3 characters long'),
+  country: z.string().min(3,'Country must be at least 3 characters long'),
+  lat: z.number().optional(),
+  lng: z.number().optional(),
+ 
 });

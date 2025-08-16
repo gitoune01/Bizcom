@@ -18,3 +18,11 @@ export const formUpVals = {
   password: '',
   confirmPassword: '',
 };
+
+export const shippingAddressValues = {
+  fullName: 'John Doe',
+  streetAddress: '123 Main Street',
+  city: 'Anytown',
+  postalCode: '12345',
+  country: 'USA',
+};

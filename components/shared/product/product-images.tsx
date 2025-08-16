@@ -7,7 +7,7 @@ import { useState } from 'react';
 const ProductImages = ({ images }: { images: string[] }) => {
   const [current, setCurrent] = useState(0);
 
-  console.log(images);
+
   return (
     <div className="space-y-4">
       <Image
