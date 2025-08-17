@@ -8,6 +8,7 @@ import { prisma } from '@/db/prisma';
 import { CloudRain } from 'lucide-react';
 import { formatError } from '../utils';
 import { ZodError } from 'zod';
+import { ShippingAddress } from '@/types';
 
 //sign In the user with credentials
 
@@ -60,29 +61,49 @@ export async function signUpUser(prevState: unknown, formData: FormData) {
     await signIn('credentials', { email: user.email, password: plainPassword });
     return { success: true, message: 'Signed up successfully' };
   } catch (error: any) {
-    console.log('error', error);
     let errMsg: string | undefined;
     if (error instanceof ZodError) {
       errMsg = error.issues.map((issue) => issue.message).join(', ');
-      console.log("ERROR))))))))))))))))>", error.issues);
     } else if (
       error.name === 'PrismaClientKnownRequestError' &&
       error.code === 'P2002'
     ) {
       //handle prisma errors
-      
+
       const field = error.meta?.target ? error.meta.target[0] : 'field';
 
       errMsg = field.charAt(0).toUpperCase() + field.slice(1);
       errMsg += ' already exists';
     } else {
       //handle other errors
-      errMsg = typeof error.message === 'string' ? error.message : JSON.stringify(error.message);
-    }  
+      errMsg =
+        typeof error.message === 'string'
+          ? error.message
+          : JSON.stringify(error.message);
+    }
 
     if (isRedirectError(error)) {
       throw error;
     }
     return { success: false, message: errMsg };
   }
+}
+
+//get user by id
+
+export async function getUserById(userId: string) {
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+  if (!user) throw new Error('User not found');
+
+  return user;
+}
+
+//update the user's address
+
+export async function updateUserAddress(data:ShippingAddress) {
+
 }
