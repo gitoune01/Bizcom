@@ -2,9 +2,11 @@ import { getSingleProduct } from '@/lib/actions/product.actions';
 import { notFound } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+
 import ProductPrice from '@/components/shared/product/product-price';
 import ProductImages from '@/components/shared/product/product-images';
+import AddToCart from '@/components/shared/header/add-to-cart';
+import { getMyCart } from '@/lib/actions/cart.actions';
 
 const ProductDetailsPage = async (props: {
   params: Promise<{ slug: string }>;
@@ -13,11 +15,14 @@ const ProductDetailsPage = async (props: {
 
   const product = await getSingleProduct(slug);
   if (!product) notFound();
+
+
+  const cart = await getMyCart();
   return (
     <section>
       <div className="grid grid-cols-1 md:grid-cols-5">
         <div className="col-span-2">
-             <ProductImages images={product.images} />
+          <ProductImages images={product.images} />
         </div>
         <div className="col-span-2 p-5">
           {/* Details column */}
@@ -42,7 +47,7 @@ const ProductDetailsPage = async (props: {
           </div>
         </div>
         {/* Action column */}
-     
+
         <div>
           <Card>
             <CardContent className="p-4">
@@ -62,7 +67,17 @@ const ProductDetailsPage = async (props: {
               </div>
               {product.stock > 0 && (
                 <div className="flex-center">
-                  <Button className="w-full">Add To Cart</Button>
+                  <AddToCart
+                    cart={cart}
+                    item={{
+                      productId: product.id,
+                      name: product.name,
+                      slug: product.slug,
+                      qty: 1,
+                      image: product.images![0],
+                      price: product.price,
+                    }}
+                  />
                 </div>
               )}
             </CardContent>
