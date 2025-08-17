@@ -9,6 +9,8 @@ import { CloudRain } from 'lucide-react';
 import { formatError } from '../utils';
 import { ZodError } from 'zod';
 import { ShippingAddress } from '@/types';
+import { auth } from '@/auth';
+import { PrismaAdapter } from '@auth/prisma-adapter';
 
 //sign In the user with credentials
 
@@ -104,6 +106,19 @@ export async function getUserById(userId: string) {
 
 //update the user's address
 
-export async function updateUserAddress(data:ShippingAddress) {
-
+export async function updateUserAddress(data: ShippingAddress) {
+  try {
+    const session = await auth();
+    const currentUser = await prisma.user.findUnique({
+      where: {
+        id: session?.user?.id as string,
+      },
+    });
+    if (!currentUser) throw new Error('User not found');
+  } catch (error) {
+    return {
+      success: false,
+      message: formatError(error),
+    };
+  }
 }
