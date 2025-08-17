@@ -1,6 +1,6 @@
 'use server';
 
-import { signInFormSchema, signUpFormSchema } from '../validators';
+import { shippingAddressSchema, signInFormSchema, signUpFormSchema } from '../validators';
 import { signIn, signOut } from '@/auth';
 import { isRedirectError } from 'next/dist/client/components/redirect-error';
 import { hashSync } from 'bcrypt-ts-edge';
@@ -115,6 +115,24 @@ export async function updateUserAddress(data: ShippingAddress) {
       },
     });
     if (!currentUser) throw new Error('User not found');
+
+   //check data address validity from form
+    const address = shippingAddressSchema.parse(data)
+    //update in db
+    await prisma.user.update({
+      where: {
+        id: currentUser.id,
+      },
+      data: {
+        address
+      },
+    })
+
+    return {
+      success: true,
+      message: 'Address updated successfully',
+    };
+
   } catch (error) {
     return {
       success: false,
